@@ -35,9 +35,14 @@ module registerfile (
 
     // the specifications say that "the read is synchronized with the clock",
     // so we add flip-flops to the output to achieve this behavior
-    always_ff @(posedge clk) begin
-        data_out1 <= reg_file[read_addr1];
-        data_out2 <= reg_file[read_addr2];
+    always_ff @(posedge clk or negedge rst_n) begin
+        if (~rst_n) begin
+            data_out1 <= '0;
+            data_out2 <= '0;
+        end else begin
+            data_out1 <= reg_file[read_addr1];
+            data_out2 <= reg_file[read_addr2];   
+        end
     end
 
 endmodule
